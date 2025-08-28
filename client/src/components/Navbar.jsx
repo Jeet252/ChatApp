@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 
 export default function Navbar({ username, setUsername }) {
   const [displayStyle, setDisplayStyle] = useState(true);
   const [changeTabStyle, setChangeTabStyle] = useState(true);
   const [inputValue, setInputValue] = useState("");
+
   const toggleDisplay = (e) => {
-    console.log("object");
     if (e.target.textContent !== "Change Username") {
       setDisplayStyle(!displayStyle);
     } else if (e.target.textContent === "Change Username") {
@@ -14,6 +14,37 @@ export default function Navbar({ username, setUsername }) {
       setDisplayStyle(!displayStyle);
     }
   };
+
+  const fetchUsername = async () => {
+    try {
+      const response = await fetch(
+        "https://apilearning.netlify.app/.netlify/functions/api/wordle-words"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch username");
+      }
+      const data = await response.json();
+      return data[Math.floor(Math.random() * (340 - 0 + 1)) + 0];
+    } catch (error) {
+      console.error("Error fetching username:", error);
+    }
+  };
+
+  const handleSetUsername = (e) => {
+    e.preventDefault();
+    setUsername(inputValue);
+    setChangeTabStyle(!changeTabStyle);
+  };
+
+  useEffect(() => {
+    (async () => {
+      if (!username) {
+        const tempUsername = await fetchUsername();
+        setUsername(tempUsername);
+        sessionStorage.setItem("Username", JSON.stringify(tempUsername));
+      }
+    })();
+  }, []);
   return (
     <nav className="navbar">
       <ul>ChatApp</ul>
@@ -34,23 +65,22 @@ export default function Navbar({ username, setUsername }) {
         className="change-username-tab"
         style={{ display: `${changeTabStyle ? "none" : "flex"}` }}
       >
-        <div className="change-username-tab-inputsection">
+        <form
+          onSubmit={(e) => handleSetUsername(e)}
+          className="change-username-tab-inputsection"
+        >
+          <p>Username require Minimum 3 or Maximum 10 Character</p>
           <input
+            minLength={3}
+            maxLength={10}
             type="text"
             name=""
             id=""
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
-          <button
-            onClick={() => {
-              setUsername(inputValue);
-              setChangeTabStyle(!changeTabStyle);
-            }}
-          >
-            Set Username
-          </button>
-        </div>
+          <button type="submit">Set Username</button>
+        </form>
       </div>
     </nav>
   );

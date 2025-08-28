@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import ChatSection from "../components/ChatSection";
 import Navbar from "../components/Navbar";
 import PeopleSection from "../components/PeopleSection";
-
 import { io } from "socket.io-client";
+
 export default function Home() {
   const socket = useMemo(() => io("http://localhost:3000"), []);
   const messageData = JSON.parse(sessionStorage.getItem("Message Data")) || [];
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(
+    JSON.parse(sessionStorage.getItem("Username"))
+  );
   const [messages, setMessages] = useState([...messageData]);
 
   useEffect(() => {

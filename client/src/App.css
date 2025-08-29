@@ -132,16 +132,29 @@ body {
 }
 
 .messages-section {
-  flex: 1; /* Take up all available space */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll; /* Enable vertical scrolling */
-  padding-right: 1rem; /* Add padding to avoid content touching the edge */
-  scrollbar-width: none; /* Hide scrollbar in Firefox */
+  overflow-y: scroll;
+  padding-right: 1rem;
+  scrollbar-width: none;
 }
 
 .messages-section::-webkit-scrollbar {
   display: none;
+}
+
+.message-string {
+  align-self: center;
+  background-color: #8b8888ad;
+  color: #333;
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  margin: 0.5rem 0;
+  max-width: 70%;
+  word-wrap: break-word;
+  font-size: 0.7rem;
+  font-weight: 600;
 }
 
 .message-bubble {
@@ -149,24 +162,24 @@ body {
   color: white;
   padding: 0.75rem 1rem;
   border-radius: 15px;
-  margin: 0.5rem 0; /* Add spacing between messages */
-  max-width: 70%; /* Limit the width of the bubble */
-  word-wrap: break-word; /* Wrap long words */
+  margin: 0.5rem 0;
+  max-width: 70%;
+  word-wrap: break-word;
 }
 
 .message-bubble.sent {
   display: flex;
   flex-direction: column;
-  align-self: flex-end; /* Align sent messages to the right */
-  background-color: #1f78d1; /* Slightly darker blue for sent messages */
+  align-self: flex-end;
+  background-color: #1f78d1;
 }
 
 .message-bubble.received {
   flex-direction: column;
   display: flex;
-  align-self: flex-start; /* Align received messages to the left */
-  background-color: #d1d1d1; /* Light grey for received messages */
-  color: #333; /* Dark text for readability */
+  align-self: flex-start;
+  background-color: #d1d1d1;
+  color: #333;
 }
 
 .sender-name {
@@ -174,10 +187,10 @@ body {
   font-size: 0.9rem;
 }
 .message-input-section {
-  display: flex; /* Align input and button horizontally */
-  gap: 0.5rem; /* Add spacing between input and button */
-  padding: 0.5rem 0; /* Add vertical padding */
-  border-top: 1px solid #ccc; /* Add a top border for separation */
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid #ccc;
 }
 
 .message-input-section input {

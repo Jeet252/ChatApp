@@ -14,23 +14,20 @@ export default function Home() {
 
   useEffect(() => {
     socket.on("connect", () => {
-      console.log("id : ", socket.id, " is connected");
-
+      socket.emit("Connection Established", username);
+      socket.on("Change Username", (data) => {
+        console.log(data);
+      });
       socket.on("message", (msg) => {
-        const newData = [...messages, msg];
-        console.log(newData);
         setMessages((prevMessages) => {
           const newData = [...prevMessages, msg];
-          console.log(newData);
           sessionStorage.setItem("Message Data", JSON.stringify(newData));
           return newData;
         });
       });
     });
 
-    socket.on("disconnect", () => {
-      console.log("id : ", socket.id, " is connected");
-    });
+    socket.on("disconnect");
 
     return () => {
       socket.off("connect");
@@ -40,7 +37,7 @@ export default function Home() {
 
   return (
     <>
-      <Navbar username={username} setUsername={setUsername} />
+      <Navbar socket={socket} username={username} setUsername={setUsername} />
       <div className="app-section">
         <PeopleSection />
         <ChatSection socket={socket} messages={messages} username={username} />

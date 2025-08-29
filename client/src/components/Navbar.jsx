@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import Panchaiti from "../assets/Panchaiti.png";
 
-export default function Navbar({ username, setUsername }) {
+export default function Navbar({ socket, username, setUsername }) {
   const [displayStyle, setDisplayStyle] = useState(true);
   const [changeTabStyle, setChangeTabStyle] = useState(true);
   const [inputValue, setInputValue] = useState("");
@@ -35,6 +35,11 @@ export default function Navbar({ username, setUsername }) {
     e.preventDefault();
     setUsername(inputValue);
     setChangeTabStyle(!changeTabStyle);
+
+    socket.emit(
+      "Change Username",
+      `${username} has change username to ${inputValue}`
+    );
   };
 
   useEffect(() => {

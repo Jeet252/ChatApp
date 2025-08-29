@@ -21,9 +21,13 @@ app.get("/", (req, res) => {
 });
 
 io.on("connect", (socket) => {
-  console.log("user connected ", socket.id);
+  socket.on("Connection Established", (data) => {
+    socket.broadcast.emit("message", `${data} has join the room`);
+  });
+  socket.on("Change Username", (username) => {
+    io.emit("message", username);
+  });
   socket.on("message", (msg) => {
-    console.log(msg);
     io.emit("message", msg);
   });
   socket.on("disconnect", () => {

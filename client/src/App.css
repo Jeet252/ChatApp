@@ -106,22 +106,16 @@ body {
 .chat-section {
   background-color: #e0e0e0;
   color: #333;
-  padding: 1rem;
   overflow-y: auto;
   border-radius: 8px;
   margin: 0.5rem 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.people-section {
-  width: 20rem;
-}
-
 .chat-section {
   flex: 1;
   background-color: #e0e0e0;
   color: #333;
-  padding: 1rem;
   overflow: hidden;
   border-radius: 8px;
   margin: 0.5rem 0;
@@ -131,12 +125,21 @@ body {
   justify-content: space-between;
 }
 
+.chat-section-header span {
+  height: 40px;
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background-color: rgba(255, 255, 255, 0);
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+}
 .messages-section {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  padding-right: 1rem;
+  padding: 0 0.5rem;
   scrollbar-width: none;
 }
 
@@ -219,7 +222,6 @@ body {
   width: 23rem;
   background-color: #e0e0e0;
   color: #333;
-  padding: 1rem;
   overflow: hidden;
   border-radius: 8px;
   margin: 0.5rem 0;
@@ -233,7 +235,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  padding-right: 1rem;
+  padding: 0 1rem;
   scrollbar-width: none;
 }
 .user-room-section::-webkit-scrollbar {
@@ -252,13 +254,28 @@ body {
   max-width: 100%;
   word-wrap: break-word;
 }
+.people-section-btns,
+.chat-section-header {
+  display: flex;
+  align-items: center;
+  background-color: #3434343b;
+  border-bottom: solid 1px #3333334a;
+}
+.back-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: solid 1px #3333334a;
+  height: 40px;
+  width: 40px;
+}
 .create-room-btn {
-  margin-top: 8px;
+  height: 40px;
+  flex: 1;
   padding: 0.75rem 1rem;
-  background-color: #4a90e2;
+  background-color: rgba(255, 255, 255, 0);
   color: white;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
   align-self: center;

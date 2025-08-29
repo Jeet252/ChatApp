@@ -2,7 +2,7 @@
   .people-section {
     width: 100vw;
   }
-  .chat-section {
+  .people-section {
     display: none;
   }
 }
@@ -10,7 +10,7 @@
   .back-logo {
     display: none;
   }
-  .people-section {
+  .chat-section {
     display: none;
   }
 }

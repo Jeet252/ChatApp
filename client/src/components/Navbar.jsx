@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
+import Panchaiti from "../assets/Panchaiti.png";
 
 export default function Navbar({ username, setUsername }) {
   const [displayStyle, setDisplayStyle] = useState(true);
@@ -47,7 +48,12 @@ export default function Navbar({ username, setUsername }) {
   }, []);
   return (
     <nav className="navbar">
-      <ul>ChatApp</ul>
+      <ul>
+        <li className="brand-logo">
+          <img src={Panchaiti} alt="Panchaiti" />
+        </li>
+        <li className="brand-name">Panchaiti</li>
+      </ul>
       <ul onClick={(e) => toggleDisplay(e)}>
         <li>{username}</li>
 

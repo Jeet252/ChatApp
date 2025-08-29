@@ -25,6 +25,15 @@ body {
   gap: 0.5rem;
 }
 
+.brand-logo {
+  display: flex;
+}
+
+.brand-logo img {
+  height: 30px;
+  border-radius: 25%;
+}
+
 .change-username-section {
   position: absolute;
   right: 0;

@@ -5,7 +5,7 @@ import PeopleSection from "../components/PeopleSection";
 import { io } from "socket.io-client";
 
 export default function Home() {
-  const socket = useMemo(() => io("https://chatapp-h5ub.onrender.com"), []);
+  const socket = useMemo(() => io(import.meta.env.VITE_API_URL), []);
   const messageData = JSON.parse(sessionStorage.getItem("Message Data")) || [];
   const [username, setUsername] = useState(
     JSON.parse(sessionStorage.getItem("Username"))

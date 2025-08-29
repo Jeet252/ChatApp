@@ -36,6 +36,7 @@ export default function Navbar({ socket, username, setUsername }) {
     setUsername(inputValue);
     setChangeTabStyle(!changeTabStyle);
 
+    sessionStorage.setItem("Username", JSON.stringify(inputValue));
     socket.emit(
       "Change Username",
       `${username} has change username to ${inputValue}`

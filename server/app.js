@@ -33,6 +33,7 @@ io.on("connect", (socket) => {
     io.emit("message", msg);
   });
   socket.on("disconnect", () => {
+    socket.broadcast.emit("message", `${socket.id} has dissconnected`);
     console.log("socket id : ", socket.id, " is disconnect");
   });
 });

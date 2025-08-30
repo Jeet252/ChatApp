@@ -6,8 +6,9 @@ import { io } from "socket.io-client";
 
 export default function Home() {
   const socket = useMemo(() => io(import.meta.env.VITE_API_URL), []);
-  const messageData = JSON.parse(sessionStorage.getItem("Message Data")) || [];
-  const [messages, setMessages] = useState([...messageData]);
+  const [users, setUsers] = useState(new Map());
+  const [rooms, setRooms] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState(
     JSON.parse(sessionStorage.getItem("Username"))
   );
@@ -27,12 +28,33 @@ export default function Home() {
     setIsHigherInnerWidth(window.innerWidth < 750);
     socket.on("connect", () => {
       socket.emit("Connection Established", username);
-      socket.on("message", (msg) => {
-        setMessages((prevMessages) => {
-          const newData = [...prevMessages, msg];
-          sessionStorage.setItem("Message Data", JSON.stringify(newData));
+      socket.on("Users in Room", (data) => {
+        setUsers(() => {
+          const newData = new Map(data);
+          newData.delete(socket.id);
           return newData;
         });
+      });
+      socket.on("message", (data) => {
+        if (data.oldUsername) {
+          setMessages((prevMessages) => {
+            const newData = [
+              ...prevMessages,
+              `${data.oldUsername} has change username to ${data.newUsername}`,
+            ];
+            return newData;
+          });
+        } else if (typeof data === "string" || data.message) {
+          setMessages((prevMessages) => {
+            const newData = [...prevMessages, data];
+            return newData;
+          });
+        } else {
+          setMessages((prevMessages) => {
+            const newData = [...prevMessages, data.announcement];
+            return newData;
+          });
+        }
       });
     });
 
@@ -49,6 +71,8 @@ export default function Home() {
       <Navbar socket={socket} username={username} setUsername={setUsername} />
       <div className="app-section">
         <PeopleSection
+          users={users}
+          rooms={rooms}
           forResponsiveDesign={forResponsiveDesign}
           setForResponsiveDesign={setForResponsiveDesign}
           socket={socket}

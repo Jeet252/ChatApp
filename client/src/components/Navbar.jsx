@@ -37,10 +37,10 @@ export default function Navbar({ socket, username, setUsername }) {
     setChangeTabStyle(!changeTabStyle);
 
     sessionStorage.setItem("Username", JSON.stringify(inputValue));
-    socket.emit(
-      "Change Username",
-      `${username} has change username to ${inputValue}`
-    );
+    socket.emit("Change Username", {
+      oldUsername: username,
+      newUsername: inputValue,
+    });
   };
 
   useEffect(() => {

@@ -17,8 +17,10 @@ export default function ChatSection({
     setForResponsiveDesign(newdesign);
   };
   const handleSend = () => {
-    socket.emit("message", { sender: username, message: inputValue });
-    setInputValue("");
+    if (inputValue !== "") {
+      socket.emit("message", { sender: username, message: inputValue.trim() });
+      setInputValue("");
+    }
   };
   return (
     <div className="chat-section" style={forResponsiveDesign[0]}>

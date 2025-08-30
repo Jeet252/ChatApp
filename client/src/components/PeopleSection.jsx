@@ -1,15 +1,14 @@
-import { useState } from "react";
 import { SiGoogleclassroom } from "react-icons/si";
 import { CiUser } from "react-icons/ci";
 import { IoArrowBack } from "react-icons/io5";
 
 export default function PeopleSection({
   socket,
+  users,
+  rooms,
   forResponsiveDesign,
   setForResponsiveDesign,
 }) {
-  const [users, setUsers] = useState(["jeet", "vandan", "himesh"]);
-  const [rooms, setRooms] = useState(["jeetRoom", "vendanroom"]);
   const handleBack = (e) => {
     if (e.target.textContent === "Create Room") {
       console.log(e.target.textContent);
@@ -36,10 +35,10 @@ export default function PeopleSection({
       </div>
 
       <div className="user-room-section">
-        {users.map((elem, index) => (
-          <li className="user-element" key={index}>
+        {[...users.entries()].map(([elem, index]) => (
+          <li className="user-element" key={elem}>
             <CiUser />
-            {elem}
+            {index}
           </li>
         ))}
         {rooms.map((elem, index) => (

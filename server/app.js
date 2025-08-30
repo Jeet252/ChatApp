@@ -9,6 +9,7 @@ const port = process.env.PORT;
 
 const app = express();
 const server = createServer(app);
+const users = new Map();
 const io = new Server(server, {
   cors: {
     origin: process.env.URL,
@@ -24,17 +25,29 @@ app.get("/", (req, res) => {
 
 io.on("connect", (socket) => {
   socket.on("Connection Established", (data) => {
-    socket.broadcast.emit("message", `${data} has join the room`);
+    users.set(socket.id, data);
+    io.emit("Users in Room", [...users.entries()]);
+    socket.broadcast.emit("message", {
+      socketId: socket.id,
+      user: data,
+      announcement: `${data} has join room`,
+    });
   });
-  socket.on("Change Username", (username) => {
-    io.emit("message", username);
+  socket.on("Change Username", (data) => {
+    users.set(socket.id, data.newUsername);
+    io.emit("message", {
+      oldUsername: data.oldUsername,
+      newUsername: data.newUsername,
+      socketId: socket.id,
+    });
   });
-  socket.on("message", (msg) => {
-    io.emit("message", msg);
+  socket.on("message", (data) => {
+    io.emit("message", data);
   });
   socket.on("disconnect", () => {
     socket.broadcast.emit("message", `${socket.id} has dissconnected`);
-    console.log("socket id : ", socket.id, " is disconnect");
+    users.delete(socket.id);
+    io.emit("Users in Room", [...users.entries()]);
   });
 });
 

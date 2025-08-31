@@ -205,7 +205,7 @@ body {
 .message-input-section {
   display: flex;
   gap: 0.5rem;
-  padding: 0.5rem 0;
+  padding: 0.5rem;
   border-top: 1px solid #ccc;
 }
 
@@ -240,7 +240,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  padding: 0 1rem;
+  padding: 0.5rem;
   scrollbar-width: none;
 }
 .user-room-section::-webkit-scrollbar {
@@ -259,7 +259,7 @@ body {
   max-width: 100%;
   word-wrap: break-word;
 }
-.people-section-btns,
+.people-section-header,
 .chat-section-header {
   display: flex;
   align-items: center;
@@ -274,14 +274,12 @@ body {
   height: 40px;
   width: 40px;
 }
-.create-room-btn {
+.people-section-header span {
   height: 40px;
   flex: 1;
   padding: 0.75rem 1rem;
   background-color: rgba(255, 255, 255, 0);
   color: white;
-  border: none;
-  cursor: pointer;
   font-size: 1rem;
-  align-self: center;
+  text-align: center;
 }

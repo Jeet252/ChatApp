@@ -21,7 +21,7 @@ export default function PeopleSection({
       }`}
     >
       <div
-        className="people-section-btns"
+        className="people-section-header"
         onClick={(e) => {
           handleBack(e);
         }}
@@ -29,7 +29,7 @@ export default function PeopleSection({
         <div className="back-logo">
           <IoArrowBack size={32} />
         </div>
-        <button className="create-room-btn">Create Room</button>
+        <span>People Online</span>
       </div>
 
       <div className="user-room-section">

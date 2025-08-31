@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import Panchaiti from "../assets/Panchaiti.png";
 
-export default function Navbar({ socket, username, setUsername }) {
+export default function Navbar({
+  socket,
+  username,
+  setUsername,
+  setIsLoading,
+}) {
   const [displayStyle, setDisplayStyle] = useState(true);
   const [changeTabStyle, setChangeTabStyle] = useState(true);
   const [inputValue, setInputValue] = useState("");
@@ -46,9 +51,11 @@ export default function Navbar({ socket, username, setUsername }) {
   useEffect(() => {
     (async () => {
       if (!username) {
+        setIsLoading(true);
         const tempUsername = await fetchUsername();
         setUsername(tempUsername);
         sessionStorage.setItem("Username", JSON.stringify(tempUsername));
+        setIsLoading(false);
       }
     })();
   }, []);

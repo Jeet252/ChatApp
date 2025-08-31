@@ -5,25 +5,36 @@ export default function ChatSection({
   socket,
   username,
   messages,
-  forResponsiveDesign,
-  setForResponsiveDesign,
+  responsiveCSS,
+  setResponsiveCSS,
 }) {
   const [inputValue, setInputValue] = useState("");
 
   const handleBack = () => {
-    let newdesign = [...forResponsiveDesign];
-    newdesign[0] = { display: "none" };
-    newdesign[1] = { display: "flex" };
-    setForResponsiveDesign(newdesign);
+    setResponsiveCSS(!responsiveCSS);
   };
   const handleSend = () => {
     if (inputValue !== "") {
-      socket.emit("message", { sender: username, message: inputValue.trim() });
+      socket.emit("message", {
+        sender: username,
+        message: inputValue.trim(),
+        senderId: socket.id,
+      });
       setInputValue("");
     }
   };
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSend();
+    }
+  };
   return (
-    <div className="chat-section" style={forResponsiveDesign[0]}>
+    <div
+      className={`chat-section ${
+        responsiveCSS ? "for-dynamic-chat-section" : ""
+      }`}
+    >
       <div className="chat-section-header">
         <div className="back-logo" onClick={handleBack}>
           <IoArrowBack size={32} />
@@ -40,13 +51,13 @@ export default function ChatSection({
             <ul
               key={index}
               className={`message-bubble ${
-                elem.sender === username ? "sent" : "received"
+                elem.senderId === socket.id ? "sent" : "received"
               }`}
             >
               <span
                 className="sender-name"
                 style={{
-                  display: `${elem.sender === username ? "none" : "flex"}`,
+                  display: `${elem.senderId === socket.id ? "none" : "flex"}`,
                 }}
               >
                 {elem.sender}
@@ -58,6 +69,7 @@ export default function ChatSection({
       </div>
       <div className="message-input-section">
         <input
+          onKeyDown={(e) => handleEnter(e)}
           type="text"
           className="input-message"
           value={inputValue}

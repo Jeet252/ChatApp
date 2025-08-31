@@ -3,29 +3,19 @@ import ChatSection from "../components/ChatSection";
 import Navbar from "../components/Navbar";
 import PeopleSection from "../components/PeopleSection";
 import { io } from "socket.io-client";
+import SvgLoader from "../components/SvgLoader";
 
 export default function Home() {
   const socket = useMemo(() => io(import.meta.env.VITE_API_URL), []);
+  const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState(new Map());
-  const [rooms, setRooms] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [responsiveCSS, setResponsiveCSS] = useState(true);
   const [username, setUsername] = useState(
     JSON.parse(sessionStorage.getItem("Username"))
   );
-  const [isHigherInnerWidth, setIsHigherInnerWidth] = useState(
-    window.innerWidth < 750 // false for pc
-  );
-  const [forResponsiveDesign, setForResponsiveDesign] = useState([
-    {
-      display: "flex",
-    },
-    {
-      display: `${isHigherInnerWidth ? "none" : "flex"}`,
-    },
-  ]);
 
   useEffect(() => {
-    setIsHigherInnerWidth(window.innerWidth < 750);
     socket.on("connect", () => {
       socket.emit("Connection Established", username);
       socket.on("Users in Room", (data) => {
@@ -68,23 +58,35 @@ export default function Home() {
 
   return (
     <>
-      <Navbar socket={socket} username={username} setUsername={setUsername} />
-      <div className="app-section">
-        <PeopleSection
-          users={users}
-          rooms={rooms}
-          forResponsiveDesign={forResponsiveDesign}
-          setForResponsiveDesign={setForResponsiveDesign}
-          socket={socket}
-        />
-        <ChatSection
-          forResponsiveDesign={forResponsiveDesign}
-          setForResponsiveDesign={setForResponsiveDesign}
-          socket={socket}
-          messages={messages}
-          username={username}
-        />
-      </div>
+      {isLoading ? (
+        <div className="homePage-loading">
+          <SvgLoader label={"Server"} />
+        </div>
+      ) : (
+        <div>
+          <Navbar
+            socket={socket}
+            username={username}
+            setUsername={setUsername}
+            setIsLoading={setIsLoading}
+          />
+          <div className="app-section">
+            <PeopleSection
+              users={users}
+              responsiveCSS={responsiveCSS}
+              setResponsiveCSS={setResponsiveCSS}
+              socket={socket}
+            />
+            <ChatSection
+              responsiveCSS={responsiveCSS}
+              setResponsiveCSS={setResponsiveCSS}
+              socket={socket}
+              messages={messages}
+              username={username}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 }

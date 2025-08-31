@@ -1,16 +1,30 @@
+/* FOR SMALL WIDTH DEVICES */
 @media only screen and (max-width: 750px) {
   .people-section {
     width: 100vw;
-  }
-  .people-section {
     display: none;
   }
+  .chat-section {
+    display: none;
+  }
+  .for-dynamic-chat-section {
+    display: flex !important;
+  }
+  .for-dynamic-people-section {
+    display: flex !important;
+  }
 }
+
+/* FOR LARGE WIDTH DEVICES */
 @media only screen and (min-width: 750px) {
   .back-logo {
     display: none;
   }
   .chat-section {
-    display: none;
+    display: flex;
+  }
+  .people-section {
+    width: 23rem;
+    display: flex;
   }
 }

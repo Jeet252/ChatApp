@@ -26,7 +26,6 @@ export default function InputSection({ socket, username }) {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(fileValue);
     if (fileValue) {
       const reader = new FileReader();
       reader.onload = async () => {

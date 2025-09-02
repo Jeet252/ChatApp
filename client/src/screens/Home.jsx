@@ -26,7 +26,6 @@ export default function Home({ username, setUsername }) {
     } else if (typeof data === "string" || data.message) {
       setMessages((prevMessages) => {
         const newData = [...prevMessages, data];
-        console.log(newData);
         return newData;
       });
     } else if (data.image) {

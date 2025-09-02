@@ -1,5 +1,4 @@
 export default function ImageBubble({ data, socket }) {
-  console.log(data);
   return (
     <ul
       className={`message-bubble ${

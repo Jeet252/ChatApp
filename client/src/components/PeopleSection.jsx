@@ -7,12 +7,8 @@ export default function PeopleSection({
   responsiveCSS,
   setResponsiveCSS,
 }) {
-  const handleBack = (e) => {
-    if (e.target.textContent === "Create Room") {
-      console.log(e.target.textContent);
-    } else {
-      setResponsiveCSS(!responsiveCSS);
-    }
+  const handleBack = () => {
+    setResponsiveCSS(!responsiveCSS);
   };
   return (
     <div
@@ -20,13 +16,8 @@ export default function PeopleSection({
         !responsiveCSS ? "for-dynamic-people-section" : ""
       }`}
     >
-      <div
-        className="people-section-header"
-        onClick={(e) => {
-          handleBack(e);
-        }}
-      >
-        <div className="back-logo">
+      <div className="people-section-header">
+        <div className="back-logo" onClick={handleBack}>
           <IoArrowBack size={32} />
         </div>
         <span>People Online</span>

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { IoIosSend } from "react-icons/io";
 import { IoText } from "react-icons/io5";
 import { GoPlus } from "react-icons/go";
 import { FaRegImage } from "react-icons/fa";
 
 export default function InputSection({ socket, username }) {
+  const inputRef = useRef(null);
   const [inputValue, setInputValue] = useState("");
   const [fileValue, setFileValue] = useState("");
   const [inputType, setInputType] = useState({
@@ -15,7 +16,6 @@ export default function InputSection({ socket, username }) {
   const handleClick = (e) => {
     let id = e.target.closest("span").id;
     let newData = { ...inputType };
-    console.log(id);
     if (id === "plus") {
       setInputType({ ...newData, click: !newData.click });
     } else if (id === "image") {
@@ -26,6 +26,7 @@ export default function InputSection({ socket, username }) {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(fileValue);
     if (fileValue) {
       const reader = new FileReader();
       reader.onload = async () => {
@@ -75,12 +76,26 @@ export default function InputSection({ socket, username }) {
         </div>
       </div>
       {inputType.type === "image" && (
-        <input
-          accept="image/*"
-          className="input-image"
-          type="file"
-          onChange={(e) => setFileValue(e.target.files[0])}
-        />
+        <div className="input-image">
+          <input
+            style={{ display: "none" }}
+            ref={inputRef}
+            accept="image/*"
+            id="image-input"
+            type="file"
+            onChange={(e) => setFileValue(e.target.files[0])}
+          />
+          <label className="input-image-label" htmlFor={"input-image"}>
+            <button
+              style={{ display: fileValue ? "none" : "flex" }}
+              className="select-image-btn"
+              onClick={() => inputRef.current.click()}
+            >
+              Select Image
+            </button>
+            {fileValue.name}
+          </label>
+        </div>
       )}
       {inputType.type === "text" && (
         <input

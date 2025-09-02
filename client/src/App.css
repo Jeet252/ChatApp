@@ -257,14 +257,35 @@ body {
   padding: 5px;
 }
 .message-input-section input {
-  flex: 1;
+  flex: 1 1 auto;
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
 }
 
-.message-input-section button {
+.input-image {
+  display: inline-flex;
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+.input-image-label {
+  display: flex;
+  height: 45px;
+  align-items: center;
+  width: 100%;
+}
+.select-image-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: inherit;
+  border: none;
+  width: 100%;
+}
+.send-message-btn {
   padding: 0.75rem 1rem;
   background-color: #4a90e2;
   color: white;
@@ -274,7 +295,7 @@ body {
   font-size: 1rem;
 }
 
-.message-input-section button:hover {
+.send-message-btn:hover {
   background-color: #1f78d1;
 }
 

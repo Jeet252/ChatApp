@@ -43,7 +43,6 @@ io.on("connect", (socket) => {
     });
   });
   socket.on("message", (data) => {
-    console.log(data);
     io.emit("message", data);
   });
   socket.on("disconnect", () => {

@@ -6,11 +6,11 @@ export default function Navbar({
   socket,
   username,
   setUsername,
-  setIsLoading,
+  inputValue,
+  setInputValue,
 }) {
   const [displayStyle, setDisplayStyle] = useState(true);
   const [changeTabStyle, setChangeTabStyle] = useState(true);
-  const [inputValue, setInputValue] = useState("");
 
   const toggleDisplay = (e) => {
     if (e.target.textContent !== "Change Username") {
@@ -18,21 +18,6 @@ export default function Navbar({
     } else if (e.target.textContent === "Change Username") {
       setChangeTabStyle(!changeTabStyle);
       setDisplayStyle(!displayStyle);
-    }
-  };
-
-  const fetchUsername = async () => {
-    try {
-      const response = await fetch(
-        "https://apilearning.netlify.app/.netlify/functions/api/wordle-words"
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch username");
-      }
-      const data = await response.json();
-      return data[Math.floor(Math.random() * (340 - 0 + 1)) + 0];
-    } catch (error) {
-      console.error("Error fetching username:", error);
     }
   };
 
@@ -48,17 +33,6 @@ export default function Navbar({
     });
   };
 
-  useEffect(() => {
-    (async () => {
-      if (!username) {
-        setIsLoading(true);
-        const tempUsername = await fetchUsername();
-        setUsername(tempUsername);
-        sessionStorage.setItem("Username", JSON.stringify(tempUsername));
-        setIsLoading(false);
-      }
-    })();
-  }, []);
   return (
     <nav className="navbar">
       <ul>

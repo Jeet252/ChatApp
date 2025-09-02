@@ -1,5 +1,8 @@
-import { useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
+import Announcement from "./Announcement";
+import MessageBubble from "./MessageBubble";
+import ImageBubble from "./ImageBubble";
+import InputSection from "./InputSection";
 
 export default function ChatSection({
   socket,
@@ -8,27 +11,10 @@ export default function ChatSection({
   responsiveCSS,
   setResponsiveCSS,
 }) {
-  const [inputValue, setInputValue] = useState("");
-
   const handleBack = () => {
     setResponsiveCSS(!responsiveCSS);
   };
-  const handleSend = () => {
-    if (inputValue !== "") {
-      socket.emit("message", {
-        sender: username,
-        message: inputValue.trim(),
-        senderId: socket.id,
-      });
-      setInputValue("");
-    }
-  };
-  const handleEnter = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleSend();
-    }
-  };
+
   return (
     <div
       className={`chat-section ${
@@ -42,43 +28,17 @@ export default function ChatSection({
         <span>Room Name</span>
       </div>
       <div className="messages-section">
-        {messages.map((elem, index) =>
-          typeof elem === "string" ? (
-            <p key={index} className="message-string">
-              {elem}
-            </p>
-          ) : (
-            <ul
-              key={index}
-              className={`message-bubble ${
-                elem.senderId === socket.id ? "sent" : "received"
-              }`}
-            >
-              <span
-                className="sender-name"
-                style={{
-                  display: `${elem.senderId === socket.id ? "none" : "flex"}`,
-                }}
-              >
-                {elem.sender}
-              </span>
-              <span>{elem.message}</span>
-            </ul>
-          )
-        )}
+        {messages.map((elem, index) => {
+          if (typeof elem === "string") {
+            return <Announcement key={index} content={elem} />;
+          } else if (elem.image) {
+            return <ImageBubble data={elem} key={index} socket={socket} />;
+          } else if (elem.message) {
+            return <MessageBubble key={index} data={elem} socket={socket} />;
+          }
+        })}
       </div>
-      <div className="message-input-section">
-        <input
-          onKeyDown={(e) => handleEnter(e)}
-          type="text"
-          className="input-message"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <button onClick={handleSend} className="send-message-btn">
-          Send
-        </button>
-      </div>
+      <InputSection socket={socket} username={username} />
     </div>
   );
 }

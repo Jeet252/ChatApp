@@ -3,17 +3,49 @@ import ChatSection from "../components/ChatSection";
 import Navbar from "../components/Navbar";
 import PeopleSection from "../components/PeopleSection";
 import { io } from "socket.io-client";
-import SvgLoader from "../components/SvgLoader";
 
-export default function Home() {
-  const socket = useMemo(() => io(import.meta.env.VITE_API_URL), []);
-  const [isLoading, setIsLoading] = useState(false);
+export default function Home({ username, setUsername }) {
+  const socket = useMemo(
+    () => io(import.meta.env.VITE_API_URL, { transports: ["websocket"] }),
+    []
+  );
+  const [inputValue, setInputValue] = useState("");
   const [users, setUsers] = useState(new Map());
   const [messages, setMessages] = useState([]);
   const [responsiveCSS, setResponsiveCSS] = useState(true);
-  const [username, setUsername] = useState(
-    JSON.parse(sessionStorage.getItem("Username"))
-  );
+
+  const recieveMessages = (data) => {
+    if (data.oldUsername) {
+      setMessages((prevMessages) => {
+        const newData = [
+          ...prevMessages,
+          `${data.oldUsername} has change username to ${data.newUsername}`,
+        ];
+        return newData;
+      });
+    } else if (typeof data === "string" || data.message) {
+      setMessages((prevMessages) => {
+        const newData = [...prevMessages, data];
+        console.log(newData);
+        return newData;
+      });
+    } else if (data.image) {
+      const blob = new Blob([data.image], { type: "image/png" });
+      const url = URL.createObjectURL(blob);
+      setMessages((prevMessages) => {
+        const newData = [
+          ...prevMessages,
+          { senderId: data.senderId, sender: data.sender, image: url },
+        ];
+        return newData;
+      });
+    } else {
+      setMessages((prevMessages) => {
+        const newData = [...prevMessages, data.announcement];
+        return newData;
+      });
+    }
+  };
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -26,67 +58,42 @@ export default function Home() {
         });
       });
       socket.on("message", (data) => {
-        if (data.oldUsername) {
-          setMessages((prevMessages) => {
-            const newData = [
-              ...prevMessages,
-              `${data.oldUsername} has change username to ${data.newUsername}`,
-            ];
-            return newData;
-          });
-        } else if (typeof data === "string" || data.message) {
-          setMessages((prevMessages) => {
-            const newData = [...prevMessages, data];
-            return newData;
-          });
-        } else {
-          setMessages((prevMessages) => {
-            const newData = [...prevMessages, data.announcement];
-            return newData;
-          });
-        }
+        recieveMessages(data);
       });
     });
-
-    socket.on("disconnect");
 
     return () => {
       socket.off("connect");
       socket.off("disconnect");
     };
-  }, []);
+  }, [username]);
 
   return (
     <>
-      {isLoading ? (
-        <div className="homePage-loading">
-          <SvgLoader label={"Server"} />
-        </div>
-      ) : (
-        <div>
-          <Navbar
+      <div>
+        <Navbar
+          socket={socket}
+          username={username}
+          setUsername={setUsername}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+        />
+        <div className="app-section">
+          <PeopleSection
+            users={users}
+            responsiveCSS={responsiveCSS}
+            setResponsiveCSS={setResponsiveCSS}
             socket={socket}
-            username={username}
-            setUsername={setUsername}
-            setIsLoading={setIsLoading}
           />
-          <div className="app-section">
-            <PeopleSection
-              users={users}
-              responsiveCSS={responsiveCSS}
-              setResponsiveCSS={setResponsiveCSS}
-              socket={socket}
-            />
-            <ChatSection
-              responsiveCSS={responsiveCSS}
-              setResponsiveCSS={setResponsiveCSS}
-              socket={socket}
-              messages={messages}
-              username={username}
-            />
-          </div>
+          <ChatSection
+            responsiveCSS={responsiveCSS}
+            setResponsiveCSS={setResponsiveCSS}
+            socket={socket}
+            messages={messages}
+            username={username}
+          />
         </div>
-      )}
+      </div>
     </>
   );
 }

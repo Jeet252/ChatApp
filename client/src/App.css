@@ -182,6 +182,13 @@ body {
   max-width: 70%;
   word-wrap: break-word;
 }
+.image-bubble {
+  height: fit-content;
+}
+.image-bubble img {
+  height: 220px;
+  border-radius: 15px;
+}
 
 .message-bubble.sent {
   display: flex;
@@ -208,7 +215,47 @@ body {
   padding: 0.5rem;
   border-top: 1px solid #ccc;
 }
-
+.icons-container {
+  width: 40px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.toggle-input-icons {
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+  background-color: #b3aeae;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  border-radius: 20px;
+}
+.toggle-input-icons-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 50% 50% 0 0;
+  background: inherit;
+  margin-bottom: 2px;
+}
+.plus-icon {
+  display: flex;
+  border-radius: 50%;
+  margin: 2px;
+}
+.toggle-input-icons span:hover {
+  background-color: #5f5f5f6b;
+  transition: "transform 0.5s ease-in-out";
+}
+.toggle-input-icons div span {
+  display: flex;
+  border-radius: 50%;
+  margin: 0px;
+  padding: 5px;
+}
 .message-input-section input {
   flex: 1;
   padding: 0.75rem;

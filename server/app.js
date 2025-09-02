@@ -15,6 +15,7 @@ const io = new Server(server, {
     origin: process.env.URL,
     credentials: true,
   },
+  maxHttpBufferSize: 1e8,
 });
 
 app.use(cors());
@@ -42,6 +43,7 @@ io.on("connect", (socket) => {
     });
   });
   socket.on("message", (data) => {
+    console.log(data);
     io.emit("message", data);
   });
   socket.on("disconnect", () => {

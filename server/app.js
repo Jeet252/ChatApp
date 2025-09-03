@@ -25,6 +25,8 @@ app.get("/", (req, res) => {
 });
 
 io.on("connect", (socket) => {
+  let chunks = {};
+
   socket.on("Connection Established", (data) => {
     users.set(socket.id, data);
     io.emit("Users in Room", [...users.entries()]);
@@ -34,6 +36,7 @@ io.on("connect", (socket) => {
       announcement: `${data} has join room`,
     });
   });
+
   socket.on("Change Username", (data) => {
     users.set(socket.id, data.newUsername);
     io.emit("message", {
@@ -42,9 +45,22 @@ io.on("connect", (socket) => {
       socketId: socket.id,
     });
   });
-  socket.on("message", (data) => {
-    io.emit("message", data);
+
+  socket.on("sendChunk", ({ fileId, chunk }) => {
+    if (!chunks[fileId]) chunks[fileId] = [];
+    chunks[fileId].push(Buffer.from(chunk));
   });
+
+  socket.on("message", (data) => {
+    if (data.fileId) {
+      const fullBuffer = Buffer.concat(chunks[data.fileId]);
+      delete chunks[data.fileId]; // cleanup
+      io.emit("message", { ...data, image: fullBuffer });
+    } else {
+      io.emit("message", data);
+    }
+  });
+
   socket.on("disconnect", () => {
     socket.broadcast.emit("message", `${socket.id} has dissconnected`);
     users.delete(socket.id);

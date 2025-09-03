@@ -24,16 +24,23 @@ export default function InputSection({ socket, username }) {
       setInputType({ click: !newData.click, type: id });
     }
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (fileValue) {
+      const fileId = Date.now().toString();
+      const chunkSize = 64 * 1024;
       const reader = new FileReader();
       reader.onload = async () => {
-        const result = reader.result;
+        const result = new Uint8Array(reader.result);
+        for (let i = 0; i < result.length; i += chunkSize) {
+          const chunk = result.slice(i, i + chunkSize);
+          socket.emit("sendChunk", { fileId, chunk });
+        }
         await socket.emit("message", {
           sender: username,
           senderId: socket.id,
-          image: new Uint8Array(result),
+          fileId: fileId,
         });
         setFileValue("");
       };

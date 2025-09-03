@@ -11,6 +11,7 @@ export default function ImageBubble({ data, socket }) {
           display: `${data.senderId === socket.id ? "none" : "flex"}`,
         }}
       >
+        <a download={data.name}>Download</a>
         {data.sender}
       </span>
       <span className="image-bubble">

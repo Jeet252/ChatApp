@@ -34,7 +34,12 @@ export default function Home({ username, setUsername }) {
       setMessages((prevMessages) => {
         const newData = [
           ...prevMessages,
-          { senderId: data.senderId, sender: data.sender, image: url },
+          {
+            senderId: data.senderId,
+            sender: data.sender,
+            image: url,
+            fileName: "Panchaiti" + data.fileId,
+          },
         ];
         return newData;
       });

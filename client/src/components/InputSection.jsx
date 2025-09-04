@@ -82,7 +82,7 @@ export default function InputSection({ socket, username }) {
         </div>
       </div>
       {inputType.type === "image" && (
-        <div className="input-image">
+        <div className="input-div input-image">
           <input
             style={{ display: "none" }}
             ref={inputRef}
@@ -91,7 +91,7 @@ export default function InputSection({ socket, username }) {
             type="file"
             onChange={(e) => setFileValue(e.target.files[0])}
           />
-          <label className="input-image-label" htmlFor={"input-image"}>
+          <label className="input-image-label" htmlFor={"image-input"}>
             <button
               style={{ display: fileValue ? "none" : "flex" }}
               className="select-image-btn"
@@ -104,12 +104,15 @@ export default function InputSection({ socket, username }) {
         </div>
       )}
       {inputType.type === "text" && (
-        <input
-          type="text"
-          className="input-text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
+        <div className="input-div ">
+          <input
+            className="input-image-label"
+            type="text"
+            id="text-input"
+            onChange={(e) => setInputValue(e.target.value)}
+            value={inputValue}
+          />
+        </div>
       )}
       <button type="submit" className="send-message-btn">
         <IoIosSend />

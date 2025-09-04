@@ -39,6 +39,7 @@ io.on("connect", (socket) => {
 
   socket.on("Change Username", (data) => {
     users.set(socket.id, data.newUsername);
+    io.emit("Users in Room", [...users.entries()]);
     io.emit("message", {
       oldUsername: data.oldUsername,
       newUsername: data.newUsername,
